@@ -1,73 +1,78 @@
-
-// const { MongoClient, ServerApiVersion } = require('mongodb');
-// const uri = "mongodb+srv://dragonrider01598:Aaron@548@suchislife.usetper.mongodb.net/?retryWrites=true&w=majority&appName=SuchIsLife";
-
-// const watt = 'mongodb+srv://dragonrider01598:Aaron@548@suchislife.usetper.mongodb.net/?retryWrites=true&w=majority&appName=SuchIsLife';
-
-// // Create a MongoClient with a MongoClientOptions object to set the Stable API version
-// const client = new MongoClient(uri, {
-//   serverApi: {
-//     version: ServerApiVersion.v1,
-//     strict: true,
-//     deprecationErrors: true,
-//   }
-// });
-
-// async function run() {
-//   try {
-//     // Connect the client to the server	(optional starting in v4.7)
-//     await client.connect();
-//     // Send a ping to confirm a successful connection
-//     await client.db("admin").command({ ping: 1 });
-//     console.log("Pinged your deployment. You successfully connected to MongoDB!");
-//   } finally {
-//     // Ensures that the client will close when you finish/error
-//     await client.close();
-//   }
-// }
-// run().catch(console.dir);
-
-
-
+const express = require('express');
+const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
+const cors = require('cors');
 
-const uri = "mongodb+srv://dragonrider01598:Aaron@548@suchislife.usetper.mongodb.net/?retryWrites=true&w=majority&appName=SuchIsLife";
+const app = express();
+const port = 3000;
 
+const uri = 'mongodb+srv://dragonrider01598:Aaron%40548@suchislife.3w35d9p.mongodb.net/?retryWrites=true&w=majority&appName=SuchIsLife';
 const client = new MongoClient(uri);
 
-async function main() {
-  try {
-    await client.connect();
-    console.log("Connected to the database");
+app.use(bodyParser.json());
+app.use(cors());
 
-    const database = client.db("UserData");
-    const collection = database.collection("GameData");
-
-    let saveNew = {
-      plName: nam,
-      hp_s: Math.round(Number(hp.textContent)),
-      pot_s: Math.round(Number(pts.textContent)),
-      attack_1: atk1,
-      attack_2: atk2,
-      weapon_1: wpn1.textContent,
-      weapon_2: wpn2.textContent,
-      level: lvl,
-      crown: crowns
-   }
-    const document = { email: nam, hash: hash, data: saveNew };
-
-    const result = await collection.insertOne(document);
-
-  } catch (e) {
-    console.error("Error occurred:", e);
-  } finally {
-    await client.close();
-    console.log("Connection closed");
-  }
+async function connectToDB() {
+    try {
+        await client.connect();
+        console.log('Connected to MongoDB');
+    } catch (err) {
+        console.error('Error connecting to MongoDB', err);
+        process.exit(1); // Exit the application if unable to connect to MongoDB
+    }
 }
 
-main().catch(console.error);
+connectToDB();
 
+app.post('/putData', async (req, res) => {
+    console.log('Request Body:', req.body);
 
+    const { email, hash, data } = req.body;
 
+    try {
+        // Check if a document with the same email and hash exists
+        const existingDocument = await client.db('UserData').collection('GameData').findOne({ email: email, hash: hash });
 
+        if (existingDocument) {
+            // If document exists, update it
+            const result = await client.db('UserData').collection('GameData').findOneAndUpdate(
+                { email: email, hash: hash },
+                { $set: { data: data } },
+                { returnDocument: 'after' }
+            );
+            // res.json(result.value);
+        } else {
+            // If document doesn't exist, insert a new one
+            const result = await client.db('UserData').collection('GameData').insertOne({
+                email: email,
+                hash: hash,
+                data: data
+            });
+            // res.json(result.ops[0]);
+        }
+    } catch (error) {
+        console.error('Error occurred:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.post('/retrieveData', async (req, res) => {
+    const { email, hash } = req.body;
+    try {
+        const doc = await client.db('UserData').collection('GameData').findOne({ email: email, hash: hash });
+        
+        console.log(doc)
+        if (doc) {
+            res.json(doc);
+        } else {
+            res.status(404).json({ error: 'Data not found' });
+        }
+    } catch (error) {
+        console.error('Error occurred:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.listen(port, () => {
+    console.log(`Backend server listening at http://localhost:${port}`);
+});
