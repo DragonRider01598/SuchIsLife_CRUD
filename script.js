@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+// const crypto = require('crypto');
 
 let email = 'None'
 let hash = 'None' 
@@ -9,41 +9,46 @@ function generateHash(password) {
 
 function getfields(){
    email = document.getElementById('email').value
-   hash = generateHash(document.getElementById('password').value)
-   console.log(email, hash)
+   hash = document.getElementById('password').value //generateHash()
 }
 
 document.addEventListener("DOMContentLoaded", function() {
    const floatingPromptContainer = document.querySelector(".floating-prompt-container");
  
    function showFloatingPrompt() {
-     floatingPromptContainer.style.display = "block";
+     floatingPromptContainer.style.visibility = "visible";
    }
  
    function hideFloatingPrompt() {
-     floatingPromptContainer.style.display = "none";
+     floatingPromptContainer.style.visibility = "hidden";
    }
    hideFloatingPrompt()
  
    const saves = document.querySelector("#save");
    const loads = document.querySelector('#load')
 
-   if (saves && email == 'None' && hash == 'None') {
+   if (saves) {
+      
+      console.log(email)
       saves.addEventListener("click", function() {
-       showFloatingPrompt();
+         if(email == 'None' && hash == 'None')
+            showFloatingPrompt();
+         //prompt and then save
      });
    }
 
    if (loads) {
       loads.addEventListener("click", function() {
-       showFloatingPrompt();
+         if(email == 'None' && hash == 'None')
+            showFloatingPrompt();
+         //prompt and then load
      });
    }
    const get = document.querySelector("#signin-button");
    if (get) {
-      get.addEventListener("click", function() {
-         // getfields();
-         console.log('Done')
+      get.addEventListener("click", function(event) {
+         event.preventDefault()
+         getfields();
          hideFloatingPrompt();
      });
    }
