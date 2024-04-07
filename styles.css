@@ -95,6 +95,8 @@ footer > a > img{
    border-radius: 10px;
    width: 300px;
    margin: auto auto;
+   background-color: #3f3e3e;
+   color: #808080;
  }
  
  .floating-prompt h2 {
