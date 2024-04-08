@@ -6,7 +6,7 @@ const cors = require('cors');
 const app = express();
 const port = 3000;
 
-const uri = 'mongodb+srv://dragonrider01598:Aaron%40548@suchislife.3w35d9p.mongodb.net/?retryWrites=true&w=majority&appName=SuchIsLife';
+const uri = 'mongodb+srv://dragonrider01598:<password>@suchislife.3w35d9p.mongodb.net/?retryWrites=true&w=majority&appName=SuchIsLife';
 const client = new MongoClient(uri);
 
 app.use(bodyParser.json());
