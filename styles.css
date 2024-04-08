@@ -137,3 +137,143 @@ footer > a > img{
       margin: 20px;
    }
 }
+
+.light{
+   --buttonBG : #12c;
+   --buttonTxt: #ced6d6;
+   --buttonDisBG: #bababa;
+   --bg: rgb(245, 247, 230);
+   --txt: black;
+}
+.dark{
+   --buttonBG : #1c2de6;
+   --buttonTxt: #ced6d6;
+   --buttonDisBG: #2e2d2d;
+   --bg: #424242;
+   --txt: #fff;
+}
+.mode{
+   cursor: pointer;
+}
+html{
+   box-sizing: border-box;
+   font-size: 1.5rem;
+}
+body{
+   text-align: center;
+   width: auto;
+   background-color: var(--bg);
+   color: var(--txt);
+}
+img{
+   width: 1rem;
+}
+header{
+   display: flex;
+   align-items: center;
+   flex-direction: column;
+}
+#sect{
+   width: 60%;
+   padding: 30px;
+   margin: 20px;
+   display: flex;
+   margin-right: auto;
+   margin-left: auto;
+   align-items: center;
+   flex-direction:column;
+   text-align: center;
+   border: 3px solid var(--buttonBG);
+   border-radius: 10px;
+}
+#sect >pre{
+   text-wrap: wrap;
+   justify-content: center;
+}
+button{
+   font-size: 1rem;
+   margin: 0.1rem;
+   height: fit-content;
+   border: none;
+   border-radius: 5px; 
+   background-color: var(--buttonBG);
+   color: var(--buttonTxt);
+   box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.24); 
+   cursor: pointer;
+}
+button:disabled {
+   background-color: var(--buttonDisBG);
+}
+button:active {
+   transform: scale(0.98); 
+   box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24); 
+}
+#plName {
+   text-wrap: wrap;
+}
+header>p{
+   margin: 3px;
+}
+footer > a > img{
+   width: 80px;
+}
+
+.floating-prompt-container {
+   position: fixed;
+   display: flex;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%, -50%);
+   background-color: rgba(0, 0, 0, 0.5);
+   width: 100%;
+   height: 100%;
+ }
+ 
+ .floating-prompt {
+   background-color: white;
+   padding: 20px;
+   border-radius: 10px;
+   width: 300px;
+   margin: auto auto;
+   background-color: #3f3e3e;
+   color: #808080;
+ }
+ 
+ .floating-prompt h2 {
+   margin-top: 0;
+ }
+ 
+ .floating-prompt input {
+   width: 100%;
+   margin-bottom: 10px;
+ }
+ 
+ .floating-prompt button {
+   width: 100%;
+   background-color: #007bff;
+   color: white;
+   border: none;
+   padding: 10px;
+   border-radius: 5px;
+   cursor: pointer;
+ }
+ 
+ .floating-prompt button:hover {
+   background-color: #0056b3;
+ }
+ input{
+   border-radius: 5px;
+   font-size: 0.9rem
+ }
+@media (min-width:1200px){ 
+   header{
+      flex-direction: row;
+      
+   }
+   #plName, #stats, #wpn{
+      flex-grow: 0.5;
+   }
+   header>p{
+      margin: 20px;
+   }
+}
