@@ -1,2 +1,3 @@
-# SuchIsLife_CRUD
-A front end website with addes server and databse to learn MERN stack
+# CRUD API 
+
+Used MongoDB, Express and Node to build a sevrer that helps my client side fetch and post game data to the database hosted on Mongo Atlas 
