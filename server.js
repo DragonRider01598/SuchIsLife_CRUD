@@ -30,9 +30,11 @@ app.get('/', async (req, res) => {
 })
 
 app.post('/putData', async (req, res) => {
-    console.log('Request Body:', req.body);
-
     const { email, hash, data } = req.body;
+
+    if (!email || !hash || !data) {
+        return res.status(400).json({ error: 'Invalid request, missing required fields' });
+    }
 
     try {
         // Check if a document with the same email and hash exists
@@ -45,7 +47,7 @@ app.post('/putData', async (req, res) => {
                 { $set: { data: data } },
                 { returnDocument: 'after' }
             );
-            // res.json(result.value);
+            res.status(200).json(result.value);
         } else {
             // If document doesn't exist, insert a new one
             const result = await client.db('UserData').collection('GameData').insertOne({
@@ -53,7 +55,7 @@ app.post('/putData', async (req, res) => {
                 hash: hash,
                 data: data
             });
-            // res.json(result.ops[0]);
+            res.status(201).json(result.ops[0]);
         }
     } catch (error) {
         console.error('Error occurred:', error);
@@ -66,9 +68,24 @@ app.post('/retrieveData', async (req, res) => {
     try {
         const doc = await client.db('UserData').collection('GameData').findOne({ email: email, hash: hash });
         
-        console.log(doc)
         if (doc) {
-            res.json(doc);
+            res.status(200).json(doc);
+        } else {
+            res.status(404).json({ error: 'Data not found' });
+        }
+    } catch (error) {
+        console.error('Error occurred:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.delete('/deleteData', async (req, res) => {
+    const { email, hash } = req.body;
+    try {
+        const result = await client.db('UserData').collection('GameData').deleteOne({ email, hash });
+
+        if (result.deletedCount > 0) {
+            res.status(200).json({ message: 'Data deleted successfully' });
         } else {
             res.status(404).json({ error: 'Data not found' });
         }
