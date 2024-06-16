@@ -2,11 +2,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { MongoClient } = require('mongodb');
 const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
 const port = 3000;
 
-const uri = 'mongodb+srv://dragonrider01598:<pass>@suchislife.3w35d9p.mongodb.net/?retryWrites=true&w=majority&appName=SuchIsLife';
+const uri = `mongodb+srv://${process.env.USER}:${process.env.PASS}@suchislife.3w35d9p.mongodb.net/?retryWrites=true&w=majority&appName=SuchIsLife`;
 const client = new MongoClient(uri);
 
 app.use(bodyParser.json());
@@ -23,6 +24,10 @@ async function connectToDB() {
 }
 
 connectToDB();
+
+app.get('/', async (req, res) => {
+    res.status(200).send('Server is Online')
+})
 
 app.post('/putData', async (req, res) => {
     console.log('Request Body:', req.body);
